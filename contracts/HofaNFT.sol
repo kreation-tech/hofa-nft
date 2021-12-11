@@ -69,6 +69,10 @@ contract HofaNFT is ERC721, ERC721URIStorage, ERC721Burnable, IERC2981, AccessCo
         return super.tokenURI(tokenId);
     }
 
+    function totalSupply() public view returns (uint256) {
+        return _counter.current();
+    }
+
     function supportsInterface(bytes4 interfaceId) public view override(ERC721, AccessControl, IERC165) returns (bool) {
         return type(IERC2981).interfaceId == interfaceId || super.supportsInterface(interfaceId);
     }
