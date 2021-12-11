@@ -41,11 +41,13 @@ describe("HOFA", function () {
 
   it("Admins only should be able to grant minting", async function () {
     const role = await contract.MINTER_ROLE();
-    await expect(contract.connect(hofa).grantRole(role, someone.address))
-      .to.emit("RoleGranted");
+    await contract.connect(hofa).grantRole(role, someone.address);
+    await contract.connect(someone).mint(
+      "ipfs://QmYMj2yraaBch5AoBTEjvLFdoT3ULKs4i4Ev7vte72627d", 
+      "0x04db57416b770a06b3b2123531e68d67e9d96872f453fa77bc413e9e53fc1bfc",
+      0);
 
-
-    await expect(contract.connect(artist).grantRole(role, someone.address))
+      await expect(contract.connect(artist).grantRole(role, someone.address))
       .to.be.revertedWith("AccessControl");
     await expect(contract.connect(someone).grantRole(role, someone.address))
       .to.be.revertedWith("AccessControl");

@@ -8,7 +8,6 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   extends: [
     "standard",
-    "plugin:prettier/recommended",
     "plugin:node/recommended",
   ],
   parser: "@typescript-eslint/parser",
@@ -20,5 +19,10 @@ module.exports = {
       "error",
       { ignores: ["modules"] },
     ],
+    "no-tabs" : "off",
+    "indent" : "off",
+    "space-before-function-paren" : "off",
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"]
   },
 };
