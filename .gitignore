@@ -8,3 +8,5 @@ typechain
 cache
 artifacts
 dist
+src/types
+deployments/rinkeby/solcInputs
