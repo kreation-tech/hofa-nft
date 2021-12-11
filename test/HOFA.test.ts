@@ -15,7 +15,7 @@ let receiver: SignerWithAddress;
 let facade: HOFA;
 let contractAddress:string;
 
-describe("HOFA", function () {
+describe("HOFA facade", function () {
     beforeEach(async () => {
       [hofa, artist, someone, receiver] = await ethers.getSigners();
       const { HofaNFT } = await deployments.fixture(["NFT"]);

@@ -1,3 +1,5 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable quote-props */
 module.exports = {
   env: {
     browser: false,
@@ -19,9 +21,9 @@ module.exports = {
       "error",
       { ignores: ["modules"] },
     ],
-    "no-tabs" : "off",
-    "indent" : "off",
-    "space-before-function-paren" : "off",
+    "no-tabs": "off",
+    "indent": "off",
+    "space-before-function-paren": "off",
     "quotes": ["error", "double"],
     "semi": ["error", "always"]
   },
