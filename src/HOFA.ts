@@ -1,3 +1,5 @@
+/* eslint-disable block-spacing */
+/* eslint-disable brace-style */
 /**
  * ░█▄█░▄▀▄▒█▀▒▄▀▄░░░▒░░░░█▄░█▒█▀░▀█▀
  * ▒█▒█░▀▄▀░█▀░█▀█▒░░▀▀▒░░█▒▀█░█▀░▒█▒
@@ -8,22 +10,24 @@
 import { Provider } from "@ethersproject/providers";
 import { Signer } from "@ethersproject/abstract-signer";
 // eslint-disable-next-line camelcase
-import { HofaNFT__factory, HofaNFT } from "./types";
+import { HofaNFT__factory } from "./types";
+import type { HofaNFT } from "./types";
 import addresses from "./addresses.json";
 import crypto from "crypto";
+import { BigNumberish } from "@ethersproject/bignumber";
 
 export class HOFA {
 	private signerOrProvider: Signer | Provider;
-	private factory!: HofaNFT;
+	public impl: HofaNFT;
 
     constructor(signerOrProvider: Signer | Provider, factoryAddressOrChainId: string | number) {
 		this.signerOrProvider = signerOrProvider;
 		if (typeof (factoryAddressOrChainId) !== "string") {
 			const contracts:{[key: string]: string} = (addresses as {[key: string]: {[name: string]: string}})[factoryAddressOrChainId.toString()];
 			if (!contracts) throw new Error("Unknown chain with id " + factoryAddressOrChainId);
-			this.factory = HofaNFT__factory.connect(contracts.HofaNFT, signerOrProvider);
+			this.impl = HofaNFT__factory.connect(contracts.HofaNFT, signerOrProvider);
 		} else {
-			this.factory = HofaNFT__factory.connect(factoryAddressOrChainId as string, signerOrProvider);
+			this.impl = HofaNFT__factory.connect(factoryAddressOrChainId as string, signerOrProvider);
 		}
 	}
 
@@ -42,7 +46,7 @@ export class HOFA {
 	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1): Promise<number> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
-				const tx = await (await this.factory.mint(uri, hash, royalties || 0))
+				const tx = await (await this.impl.mint(uri, hash, royalties || 0))
 					.wait(confirmations);
 				for (const log of tx.events!) {
 					if (log.event === "Transfer") {
@@ -55,10 +59,20 @@ export class HOFA {
 		})();});
 	}
 
+	public async approve(to:string, tokenId:BigNumberish, confirmations:number = 1): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			this.impl.approve(to, tokenId).then((tx) => {
+				tx.wait(confirmations).then((receipt) => {
+					resolve(true);
+				});
+			});
+		});
+	}
+
 	public async grantArtist(artist:string, confirmations:number = 1): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
-				const tx = await (await this.factory.grantRole(await this.factory.MINTER_ROLE(), artist))
+				const tx = await (await this.impl.grantRole(await this.impl.MINTER_ROLE(), artist))
 					.wait(confirmations);
 				for (const log of tx.events!) {
 					if (log.event === "RoleGranted") {
@@ -75,7 +89,7 @@ export class HOFA {
 	public async revokeArtist(artist:string, confirmations:number = 1): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
-				const tx = await (await this.factory.revokeRole(await this.factory.MINTER_ROLE(), artist))
+				const tx = await (await this.impl.revokeRole(await this.impl.MINTER_ROLE(), artist))
 					.wait(confirmations);
 				for (const log of tx.events!) {
 					if (log.event === "RoleRevoked") {

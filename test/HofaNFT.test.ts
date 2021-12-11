@@ -121,4 +121,14 @@ describe("HOFA NFT Smartcontract", function () {
     expect(await contract.connect(someone).royaltyInfo(1, ethers.utils.parseEther("2.0")))
       .to.be.deep.equal([artist.address, ethers.utils.parseEther("0.50")]);
   });
+
+  it("Owner only can approve token", async function () {
+    await contract.connect(artist).mint(
+      "ipfs://QmYMj2yraaBch5AoBTEjvLFdoT3ULKs4i4Ev7vte72627d",
+      "0x04db57416b770a06b3b2123531e68d67e9d96872f453fa77bc413e9e53fc1bfc",
+      0);
+
+    await contract.connect(artist).approve(receiver.address, 0);
+    expect(await contract.connect(receiver).getApproved(0)).to.be.equal(receiver.address);
+  });
 });

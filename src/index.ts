@@ -1,2 +1,3 @@
 /* eslint-disable node/no-missing-import */
-export type { HOFA } from "./HOFA";
+export { HOFA } from "./HOFA";
+export type { HofaNFT } from "./types/HofaNFT";
