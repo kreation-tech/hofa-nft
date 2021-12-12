@@ -10,8 +10,8 @@
 import { Provider } from "@ethersproject/providers";
 import { Signer } from "@ethersproject/abstract-signer";
 // eslint-disable-next-line camelcase
-import { HofaNFT__factory } from "../src/types";
-import type { HofaNFT } from "../src/types";
+import { HofaNFT__factory } from "./types";
+import type { HofaNFT } from "./types";
 import addresses from "./addresses.json";
 import crypto from "crypto";
 import { BigNumberish } from "@ethersproject/bignumber";
