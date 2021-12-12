@@ -50,4 +50,12 @@ describe("HOFA facade", function () {
         await expect(await admin.revokeArtist(artist.address)).to.be.true;
         await expect(await admin.revokeArtist(artist.address)).to.be.false; // if already revoked returns false
     });
+
+    it("can approve transfers", async function () {
+        const tokenId = await facade.mint(
+            "https://ipfs.io/ipfs/bafybeigr4qpkyvzj7adu3zwvnxfctxd7sa2die3bnnu63wcfokwnxtlnja",
+            "0x6af4b97a176f026958547cd0137600e82130bb05f971da36c7dff96655ca2ca9",
+            1500);
+        await expect(await facade.approve(receiver.address, tokenId)).to.be.true;
+    });
 });
