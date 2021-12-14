@@ -19,7 +19,6 @@
     "build": "hardhat compile && tsc",
     "postbuild": "npm-prepare-dist && ts-node scripts/prepare.ts",
     "clean": "rm -rf dist",
-    "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
   "devDependencies": {
