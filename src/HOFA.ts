@@ -31,6 +31,11 @@ export class HOFA {
 		}
 	}
 
+	/**
+	 * Determines the chain identifier 
+	 * 
+	 * @param signerOrProvider the signer or the provider
+	 */
 	public static async getChainId(signerOrProvider: Signer | Provider): Promise<number> {
 		return new Promise((resolve, reject) => {
 			const chainId = (signerOrProvider as Signer).getChainId();
@@ -69,6 +74,12 @@ export class HOFA {
 		});
 	}
 
+	/**
+	 * Grants artist permissions to an address
+	 * 
+	 * @param address the address to grant
+	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 */
 	public async grantArtist(artist:string, confirmations:number = 1): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
@@ -86,6 +97,12 @@ export class HOFA {
 		})();});
 	}
 
+	/**
+	 * Revokes artist permissions from an address
+	 * 
+	 * @param address the address to revoke
+	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 */
 	public async revokeArtist(artist:string, confirmations:number = 1): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
@@ -103,9 +120,19 @@ export class HOFA {
 		})();});
 	}
 
-	public static hash(buffer:Buffer): string {
-		const hashHex = crypto.createHash("sha256").update(buffer.toString()).digest("hex");
-		return "0x".concat(hashHex.toString());
+	/**
+	 * Checks if an address is listed as artist
+	 * 
+	 * @param address the address to check, defaults to current signer
+	 */
+	public async isArtist(address:string|undefined): Promise<boolean> {
+		return new Promise((resolve, reject) => { (async() => {
+			try {
+				resolve(this.impl.hasRole(await this.impl.MINTER_ROLE(), address||await (this.signerOrProvider as Signer).getAddress()));
+			} catch (err) {
+				reject(err);
+			}
+		})();});
 	}
 
 	public async metadata(title:string, description:string, uri:string, hash:string): Promise<string> {
