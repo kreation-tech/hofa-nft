@@ -34,11 +34,6 @@ describe("HOFA facade", function () {
             .and.to.have.string("\"description\":\"A long description\"");
     });
 
-    it("can produce valid hash", async function () {
-        const buf = await fs.readFile("./tsconfig.json");
-		expect(await HOFA.hash(buf)).to.equal("0xdb7b4dc13c7803e76077f8dd647a0cee23762eeb4c5e515ee862cfe00f3b103a");
-    });
-
     it("can grant permissions", async function () {
         const admin = new HOFA(hofa, contractAddress);
         await expect(await admin.grantArtist(someone.address)).to.be.true;

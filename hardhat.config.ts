@@ -42,7 +42,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
-      gasPrice: 50000000000, // 50 Gwei
+      gasPrice: 70000000000, // 70 Gwei
       accounts: [process.env.PRIVATE_KEY || ""],
     }
   },
