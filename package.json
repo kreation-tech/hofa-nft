@@ -6,12 +6,12 @@
   "typings": "./index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agileware-org/nft.git"
+    "url": "git+https://github.com/kreation-tech/hofa-nft.git"
   },
   "bugs": {
-    "url": "https://github.com/agileware-org/nft/issues"
+    "url": "https://github.com/kreation-tech/hofa-nft/issues"
   },
-  "homepage": "https://github.com/agileware-org/nft#readme",
+  "homepage": "https://github.com/kreation-tech/hofa-nft#readme",
   "scripts": {
     "compile": "hardhat compile",
     "deploy": "hardhat deploy && hardhat run scripts/deploy.ts",
