@@ -1,7 +1,7 @@
 {
   "name": "@kreation.tech/hofa-nft",
   "description": "HOFA NFT Contract and Library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./index.js",
   "typings": "./index.d.ts",
   "repository": {
