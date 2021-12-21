@@ -1,9 +1,9 @@
+/* eslint-disable node/no-missing-import */
 /* eslint-disable quotes */
 import "@nomiclabs/hardhat-ethers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { HofaNFT } from "../src/types";
 import { HOFA } from "../src/HOFA";
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
 
 const { expect } = require("chai");
 const { ethers, deployments } = require("hardhat");
