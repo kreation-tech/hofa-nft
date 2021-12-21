@@ -75,15 +75,15 @@ export class HOFA {
 		});
 	}
 
-	public async metadata(title:string, description:string, uri:string, hash:string): Promise<string> {
+	public async metadata(title:string, description:string, uri:string, hash:string, thumbnail?:string): Promise<string> {
 		return new Promise((resolve, reject) => {
 			(this.signerOrProvider as Signer).getAddress().then((address) => {
 				const metadata = {
 					name: title,
 					description: description,
-					image: uri,
+					image: (thumbnail || uri),
+					animation_url: thumbnail ? uri : undefined,
 					properties: {
-						creator: address,
 						sha256: hash
 					}
 				};
