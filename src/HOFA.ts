@@ -49,7 +49,7 @@ export class HOFA {
 		});
 	}
 
-	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<number> {
+	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<BigNumberish> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
 				const tx = await this.impl.mint(uri, hash, royalties || 0);
