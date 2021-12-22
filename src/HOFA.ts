@@ -15,11 +15,11 @@ import { HofaNFT__factory } from "./types";
 import type { HofaNFT } from "./types";
 import addresses from "./addresses.json";
 import roles from "./roles.json";
-import { BigNumberish } from "@ethersproject/bignumber";
+import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
 
 export class HOFA {
 	private signerOrProvider: Signer | Provider;
-	public impl: HofaNFT;
+	public readonly impl: HofaNFT;
 
     constructor(signerOrProvider: Signer | Provider, factoryAddressOrChainId: string | number) {
 		this.signerOrProvider = signerOrProvider;
@@ -49,7 +49,7 @@ export class HOFA {
 		});
 	}
 
-	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<BigNumberish> {
+	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<BigNumber> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
 				const tx = await this.impl.mint(uri, hash, royalties || 0);
