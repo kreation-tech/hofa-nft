@@ -105,7 +105,7 @@ export class HOFA {
 	 *
 	 * @param address the address to grant
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
-	 * @param callback a function to receive notifications about confirmations received
+	 * @param callback a callback function reporting received confirmations
 	 */
 	public async grantArtist(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return this._grantRole(roles.minter, address, confirmations, callback);
@@ -116,7 +116,7 @@ export class HOFA {
 	 *
 	 * @param address the address to revoke
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
-	 * @param callback a function to receive notifications about confirmations received
+	 * @param callback a callback function reporting received confirmations
 	 */
 	public async revokeArtist(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return this._revokeRole(roles.minter, address, confirmations, callback);
@@ -136,7 +136,7 @@ export class HOFA {
 	 *
 	 * @param address the address to grant
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
-	 * @param callback a function to receive notifications about confirmations received
+	 * @param callback a callback function reporting received confirmations
 	 */
 	public async grantAdmin(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return this._grantRole(roles.admin, address, confirmations, callback);
@@ -147,7 +147,7 @@ export class HOFA {
 	 *
 	 * @param address the address to revoke
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
-	 * @param callback a function to receive notifications about confirmations received
+	 * @param callback a callback function reporting received confirmations
 	 */
 	public async revokeAdmin(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return this._revokeRole(roles.admin, address, confirmations, callback);
@@ -167,6 +167,7 @@ export class HOFA {
 	 *
 	 * @param address the address to grant
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 * @param callback a callback function reporting received confirmations
 	 */
 	private async _grantRole(role:string, address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
@@ -195,6 +196,7 @@ export class HOFA {
 	 *
 	 * @param address the address to revoke
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 * @param callback a callback function reporting received confirmations
 	 */
 	private async _revokeRole(role:string, address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
