@@ -49,12 +49,17 @@ export class HOFA {
 		});
 	}
 
-	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1): Promise<number> {
+	public async mint(uri:string, hash:string, royalties?:number, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<number> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
-				const tx = await (await this.impl.mint(uri, hash, royalties || 0))
-					.wait(confirmations);
-				for (const log of tx.events!) {
+				const tx = await this.impl.mint(uri, hash, royalties || 0);
+                let received = tx.confirmations;
+				let receipt = await tx.wait();
+				while (received < confirmations) {
+					if (callback) callback(received, confirmations);
+					receipt = await tx.wait(received++);
+				}
+				for (const log of receipt.events!) {
 					if (log.event === "Transfer") {
 						resolve(log.args![2]);
 					}
@@ -65,13 +70,16 @@ export class HOFA {
 		})();});
 	}
 
-	public async approve(to:string, tokenId:BigNumberish, confirmations:number = 1): Promise<boolean> {
-		return new Promise((resolve, reject) => {
-			this.impl.approve(to, tokenId).then((tx) => {
-				tx.wait(confirmations).then((receipt) => {
-					resolve(true);
-				});
-			});
+	public async approve(to:string, tokenId:BigNumberish, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
+		return new Promise((resolve) => {
+			this.impl.approve(to, tokenId).then((tx) => { (async() => {
+                let received = tx.confirmations;
+				while (received < confirmations) {
+					if (callback) callback(received, confirmations);
+					await tx.wait(received++);
+				}
+                resolve(true);
+			})();});
 		});
 	}
 
@@ -97,9 +105,10 @@ export class HOFA {
 	 *
 	 * @param address the address to grant
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 * @param callback a function to receive notifications about confirmations received
 	 */
-	public async grantArtist(address:string, confirmations:number = 1): Promise<boolean> {
-		return this._grantRole(roles.minter, address, confirmations);
+	public async grantArtist(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
+		return this._grantRole(roles.minter, address, confirmations, callback);
 	}
 
 	/**
@@ -107,9 +116,10 @@ export class HOFA {
 	 *
 	 * @param address the address to revoke
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 * @param callback a function to receive notifications about confirmations received
 	 */
-	public async revokeArtist(address:string, confirmations:number = 1): Promise<boolean> {
-		return this._revokeRole(roles.minter, address, confirmations);
+	public async revokeArtist(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
+		return this._revokeRole(roles.minter, address, confirmations, callback);
 	}
 
 	/**
@@ -126,9 +136,10 @@ export class HOFA {
 	 *
 	 * @param address the address to grant
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 * @param callback a function to receive notifications about confirmations received
 	 */
-	public async grantAdmin(address:string, confirmations:number = 1): Promise<boolean> {
-		return this._grantRole(roles.admin, address, confirmations);
+	public async grantAdmin(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
+		return this._grantRole(roles.admin, address, confirmations, callback);
 	}
 
 	/**
@@ -136,9 +147,10 @@ export class HOFA {
 	 *
 	 * @param address the address to revoke
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
+	 * @param callback a function to receive notifications about confirmations received
 	 */
-	public async revokeAdmin(address:string, confirmations:number = 1): Promise<boolean> {
-		return this._revokeRole(roles.admin, address, confirmations);
+	public async revokeAdmin(address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
+		return this._revokeRole(roles.admin, address, confirmations, callback);
 	}
 
 	/**
@@ -156,12 +168,17 @@ export class HOFA {
 	 * @param address the address to grant
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
 	 */
-	private async _grantRole(role:string, address:string, confirmations:number = 1): Promise<boolean> {
+	private async _grantRole(role:string, address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
-				const tx = await (await this.impl.grantRole(role, address))
-					.wait(confirmations);
-				for (const log of tx.events!) {
+				const tx = await this.impl.grantRole(role, address);
+				let received = tx.confirmations;
+				let receipt = await tx.wait();
+				while (received < confirmations) {
+					if (callback) callback(received, confirmations);
+					receipt = await tx.wait(received++);
+				}
+				for (const log of receipt.events!) {
 					if (log.event === "RoleGranted") {
 						resolve(true);
 					}
@@ -179,12 +196,17 @@ export class HOFA {
 	 * @param address the address to revoke
 	 * @param confirmations the number of confirmations to wait for, deafults to 1
 	 */
-	private async _revokeRole(role:string, address:string, confirmations:number = 1): Promise<boolean> {
+	private async _revokeRole(role:string, address:string, confirmations:number = 1, callback?:(received:number, requested:number) => void): Promise<boolean> {
 		return new Promise((resolve, reject) => { (async() => {
 			try {
-				const tx = await (await this.impl.revokeRole(role, address))
-					.wait(confirmations);
-				for (const log of tx.events!) {
+				const tx = await this.impl.revokeRole(role, address);
+				let received = tx.confirmations;
+				let receipt = await tx.wait();
+				while (received < confirmations) {
+					if (callback) callback(received, confirmations);
+					receipt = await tx.wait(received++);
+				}
+				for (const log of receipt.events!) {
 					if (log.event === "RoleRevoked") {
 						resolve(true);
 					}

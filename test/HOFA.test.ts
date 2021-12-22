@@ -70,11 +70,32 @@ describe("HOFA facade", function () {
         await expect(await admin.isAdmin(someone.address)).to.be.false;
     });
 
+    it("Can mint reporting progress", async function () {
+        let counter = 0;
+        const tokenId = await facade.mint(
+            "https://ipfs.io/ipfs/bafybeigr4qpkyvzj7adu3zwvnxfctxd7sa2die3bnnu63wcfokwnxtlnja",
+            "0x6af4b97a176f026958547cd0137600e82130bb05f971da36c7dff96655ca2ca9",
+            1500, 8, (received: number) => { counter = received; });
+
+        expect(tokenId).to.be.equal(0);
+        expect(counter).to.be.equal(7);
+    });
+
     it("Can approve transfers", async function () {
         const tokenId = await facade.mint(
             "https://ipfs.io/ipfs/bafybeigr4qpkyvzj7adu3zwvnxfctxd7sa2die3bnnu63wcfokwnxtlnja",
             "0x6af4b97a176f026958547cd0137600e82130bb05f971da36c7dff96655ca2ca9",
             1500);
         await expect(await facade.approve(receiver.address, tokenId)).to.be.true;
+    });
+
+    it("Can approve transfers reporting progress", async function () {
+        const tokenId = await facade.mint(
+            "https://ipfs.io/ipfs/bafybeigr4qpkyvzj7adu3zwvnxfctxd7sa2die3bnnu63wcfokwnxtlnja",
+            "0x6af4b97a176f026958547cd0137600e82130bb05f971da36c7dff96655ca2ca9",
+            1500);
+        let counter = 0;
+        await expect(await facade.approve(receiver.address, tokenId, 8, (received: number) => { counter = received; })).to.be.true;
+        expect(counter).to.be.equal(7);
     });
 });
